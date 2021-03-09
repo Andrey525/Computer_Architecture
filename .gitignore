@@ -1,0 +1,11 @@
+*
+!README.md
+!.gitignore
+!*.c
+!Makefile
+!*.h
+!src
+!mySimpleComputer
+!myTerm
+!myBigChars
+!myReadkey
