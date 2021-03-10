@@ -1,1 +1,0 @@
-echo -e "\E[H\E[J\E[10;5H\E(0lqqqqqqqqk\E[11;5Hx\E[12;5Hx\E[13;5Hx\E[14;5Hx\E[15;5Hx\E[16;5Hx\E[17;5Hx\E[18;5Hmqqqqqqqqj\E[17;14Hx\E[16;14Hx\E[15;14Hx\E[14;14Hx\E[13;14Hx\E[12;14Hx\E[11;14Hx\E[12;7Haaaaaa\E[13;7Ha\E[14;7Haaaaaa\E[15;12Ha\E[16;12Ha\E[16;11Ha\E[16;10Ha\E[16;9Ha\E[16;8Ha\E[16;7Ha\E(B\E[19;12H" 
