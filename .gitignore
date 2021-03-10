@@ -8,5 +8,6 @@
 !mySimpleComputer
 !myTerm
 !myBigChars
+!myTerm+myBigChars
 !myReadkey
 !.txt
