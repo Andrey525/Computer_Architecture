@@ -68,3 +68,169 @@ int bc_printbigchar(long int* digit, int x, int y, enum colors fgcolor, enum col
     mt_setdefaultcolor();
     return 0;
 }
+
+int bc_setbigcharpos(long int* digit, int x, int y, int value)
+{
+    if (value > 1 || value < 0 || x > 7 || x < 0 || y > 7 || y < 0) {
+        return -1;
+    }
+
+    int index = 1;
+
+    if (x > 3) {
+        index = 0;
+    }
+
+    if (value == 1) {
+        digit[index] = digit[index] | 1 << (x * 8 + y);
+    } else {
+        digit[index] = digit[index] & ~(1 << (x * 8 + y));
+    }
+    return 0;
+}
+
+int bc_getbigcharpos(long int* digit, int x, int y, int* value)
+{
+    if (x > 7 || x < 0 || y > 7 || y < 0) {
+        return -1;
+    }
+
+    int index = 1;
+
+    if (x > 3) {
+        index = 0;
+    }
+
+    *value = ((digit[index] >> (x * 8 + y)) & 1);
+
+    return 0;
+}
+
+int bc_bigcharwrite(int fd, long int* digit, int count)
+{
+    if (!digit || fd < 0) {
+        return -1;
+    }
+
+    while (count > 0) {
+        int result;
+        if ((result = write(fd, digit, sizeof(int) * 2)) == -1)
+            return -1;
+        count--;
+    }
+
+    return 0;
+}
+
+int bc_bigcharread(int fd, long int* digit, int need_count, int* count)
+{
+    if (fd < 0)
+        return -1;
+
+    while (need_count > 0) {
+        int result;
+        if ((result = read(fd, digit, sizeof(int) * 2)) == -1)
+            return -1;
+
+        need_count--;
+        *count = *count + 1;
+    }
+
+    return 0;
+}
+
+void Draw()
+{
+    mt_clrscr();
+    int rows, cols;
+
+    /** Заполняем память **/
+    bc_box(5, 3, 11, 60);
+    rows = 5;
+    cols = 30;
+    mt_gotoXY(rows, cols);
+    printf(" Memory ");
+    srand(time(NULL));
+
+    for (int i = 0; i < 10; i++) {
+        rows++;
+        mt_gotoXY(rows, 4);
+        for (int j = 0; j < 10; j++) {
+            int value = rand() % 65535;
+            printf("+%04x ", value);
+        }
+    }
+
+    /** Заполняем правую часть **/
+    bc_box(5, 65, 2, 25);
+    rows = 5;
+    cols = 75;
+    mt_gotoXY(rows, cols - 3);
+    printf(" accumulator ");
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("+9999");
+    bc_box(8, 65, 2, 25);
+    rows = rows + 2;
+    mt_gotoXY(rows, cols - 6);
+    printf(" instructionCounter ");
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("+0000");
+    bc_box(11, 65, 2, 25);
+    rows = rows + 2;
+    mt_gotoXY(rows, cols - 1);
+    printf(" Operation ");
+    rows++;
+    mt_gotoXY(rows, cols - 1);
+    printf("+00 : 00");
+    bc_box(14, 65, 2, 25);
+    rows = rows + 2;
+    mt_gotoXY(rows, cols + 1);
+    printf(" Flags ");
+    rows++;
+    mt_gotoXY(rows, cols - 1);
+    printf("P O M T E");
+
+    /** Заполняем Keys **/
+    bc_box(17, 49, 9, 41);
+    rows = rows + 2;
+    cols = 50;
+    mt_gotoXY(rows, cols);
+    printf(" Keys: ");
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("l  - load");
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("s  - save");
+
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("r  - run");
+
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("t  - step");
+
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("i  - reset");
+
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("f5 - accumulator");
+
+    rows++;
+    mt_gotoXY(rows, cols);
+    printf("f6 - instructionCounter");
+
+    bc_box(17, 3, 9, 44);
+    bc_printbigchar(plus, 18, 4, white, black);
+    bc_printbigchar(nine, 18, 13, white, black);
+    bc_printbigchar(nine, 18, 22, white, black);
+    bc_printbigchar(nine, 18, 31, white, black);
+    bc_printbigchar(nine, 18, 40, white, black);
+
+    mt_gotoXY(35, 0);
+}

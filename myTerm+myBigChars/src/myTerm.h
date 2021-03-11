@@ -39,6 +39,4 @@ int mt_setfgcolor(enum colors color);
 int mt_setbgcolor(enum colors color);
 int mt_setdefaultcolor();
 
-void Draw();
-
 #endif

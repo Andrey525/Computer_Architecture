@@ -27,5 +27,10 @@ extern long int plus[2];
 int bc_printA(char* str);
 int bc_box(int x1, int y1, int x2, int y2);
 int bc_printbigchar(long int* digit, int x, int y, enum colors fgcolor, enum colors bgcolor);
+int bc_setbigcharpos(long int* digit, int x, int y, int value);
+int bc_getbigcharpos(long int* digit, int x, int y, int* value);
+int bc_bigcharwrite(int fd, long int* digit, int count);
+int bc_bigcharread(int fd, long int* digit, int need_count, int* count);
+void Draw();
 
 #endif
