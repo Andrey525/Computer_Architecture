@@ -12,6 +12,12 @@ long int six[2] = { 4291019715, 4278387711 };
 long int seven[2] = { 50727960, 811647231 };
 long int eight[2] = { 4291019715, 4291019775 };
 long int nine[2] = { 4290822399, 3284386815 };
+long int a[2] = { 1111638654, 1111630872 };
+long int b[2] = { 1044529730, 1044529726 };
+long int c[2] = { 2114060802, 33686142 };
+long int d[2] = { 1044529730, 1111638590 };
+long int e[2] = { 2114060802, 2114060926 };
+long int f[2] = { 33686018, 1040319102 };
 long int plus[2] = { 404232447, 4279769112 };
 
 int bc_printA(char* str)
@@ -274,7 +280,7 @@ void Draw()
         if (((value >> 4 * i) & 15) == 0x0) {
             bc_printbigchar(zero, 18, cols, white, black);
         } else if (((value >> 4 * i) & 15) == 0x1) {
-            bc_printbigchar(two, 18, cols, white, black);
+            bc_printbigchar(one, 18, cols, white, black);
         } else if (((value >> 4 * i) & 15) == 0x2) {
             bc_printbigchar(two, 18, cols, white, black);
         } else if (((value >> 4 * i) & 15) == 0x3) {
@@ -291,13 +297,21 @@ void Draw()
             bc_printbigchar(eight, 18, cols, white, black);
         } else if (((value >> 4 * i) & 15) == 0x9) {
             bc_printbigchar(nine, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0xA) {
+            bc_printbigchar(a, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0xB) {
+            bc_printbigchar(b, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0xC) {
+            bc_printbigchar(c, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0xD) {
+            bc_printbigchar(d, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0xE) {
+            bc_printbigchar(e, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0xF) {
+            bc_printbigchar(f, 18, cols, white, black);
         }
         cols = cols + 9;
     }
-    // bc_printbigchar(nine, 18, 13, white, black);
-    // bc_printbigchar(nine, 18, 22, white, black);
-    // bc_printbigchar(nine, 18, 31, white, black);
-    // bc_printbigchar(nine, 18, 40, white, black);
 
     mt_gotoXY(35, 0);
 }

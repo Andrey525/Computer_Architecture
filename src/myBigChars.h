@@ -22,6 +22,12 @@ extern long int six[2];
 extern long int seven[2];
 extern long int eight[2];
 extern long int nine[2];
+extern long int a[2];
+extern long int b[2];
+extern long int c[2];
+extern long int d[2];
+extern long int e[2];
+extern long int f[2];
 extern long int plus[2];
 
 int bc_printA(char* str);
