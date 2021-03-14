@@ -114,7 +114,7 @@ int bc_bigcharwrite(int fd, long int* digit, int count)
 
     while (count > 0) {
         int result;
-        if ((result = write(fd, digit, sizeof(int) * 2)) == -1)
+        if ((result = write(fd, digit, sizeof(long int) * 2)) == -1)
             return -1;
         count--;
     }
@@ -129,7 +129,7 @@ int bc_bigcharread(int fd, long int* digit, int need_count, int* count)
 
     while (need_count > 0) {
         int result;
-        if ((result = read(fd, digit, sizeof(int) * 2)) == -1)
+        if ((result = read(fd, digit, sizeof(long int) * 2)) == -1)
             return -1;
 
         need_count--;
@@ -142,6 +142,14 @@ int bc_bigcharread(int fd, long int* digit, int need_count, int* count)
 void Draw()
 {
     mt_clrscr();
+    int* rs = malloc(sizeof(int));
+    int* cs = malloc(sizeof(int));
+
+    mt_getscreensize(rs, cs);
+    if (*rs < 30 || *cs < 100) {
+        printf("Невозможно отрисовать интерфейс.\nУвеличьте размер окна терминала.\n");
+        exit(-1);
+    }
     int rows, cols;
 
     /** Заполняем память **/

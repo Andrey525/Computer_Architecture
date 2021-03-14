@@ -23,10 +23,20 @@ int main()
     // bc_getbigcharpos(plus, 3, 3, value);
     // printf("\n\n\n\nvalue = %d\n", *value);
 
-    // int fd = open("file.txt", O_CREAT);
+    // int fd = open("file.dat", O_WRONLY | O_CREAT);
+    // int fd = open("file.dat", O_RDWR | O_CREAT);
     // if (fd == -1) {
     //     printf("Error open file\n");
     // }
     // bc_bigcharwrite(fd, plus, 1);
+    // int* count = malloc(sizeof(int));
+    // bc_bigcharread(fd, zero, 1, count);
+    // bc_printbigchar(zero, 30, 10, white, black);
+    // close(fd);
+
+    // fd = open("file.dat", O_RDONLY);
+    // if (fd == -1) {
+    //     printf("Error open file\n");
+    // }
     return 0;
 }
