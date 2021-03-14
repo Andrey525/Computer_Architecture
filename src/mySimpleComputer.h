@@ -29,6 +29,8 @@
 
 int RAM[SIZE_OF_MEMORY];
 int registr_of_flags; // регистр флагов(переменная хранящая флаги)
+int instructionCounter; // счетчик команд (номер ячейки памяти, в которой находится текущая выполняемая команда)
+int accumulator; // 
 
 int sc_memoryInit();
 int sc_memorySet(int adress, int value);

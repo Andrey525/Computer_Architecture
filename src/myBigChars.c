@@ -1,4 +1,5 @@
 #include "myBigChars.h"
+#include "mySimpleComputer.h"
 #include "myTerm.h"
 
 long int zero[2] = { 4291019715, 3284386815 };
@@ -158,14 +159,14 @@ void Draw()
     cols = 30;
     mt_gotoXY(rows, cols);
     printf(" Memory ");
-    srand(time(NULL));
 
     for (int i = 0; i < 10; i++) {
         rows++;
         mt_gotoXY(rows, 4);
         for (int j = 0; j < 10; j++) {
-            int value = rand() % 65535;
-            printf("+%04x ", value);
+            // int value = rand() % 65535;
+            // printf("+%04x ", value);
+            printf("+%04x ", RAM[i * 10 + j]);
         }
     }
 
@@ -177,28 +178,59 @@ void Draw()
     printf(" accumulator ");
     rows++;
     mt_gotoXY(rows, cols);
-    printf("+9999");
+    int value;
+    sc_memoryGet(instructionCounter, &value);
+    printf("+%0x", value);
     bc_box(8, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols - 6);
     printf(" instructionCounter ");
     rows++;
     mt_gotoXY(rows, cols);
-    printf("+0000");
+    printf("+%04x", instructionCounter);
     bc_box(11, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols - 1);
     printf(" Operation ");
     rows++;
     mt_gotoXY(rows, cols - 1);
-    printf("+00 : 00");
+
+    int command = 0, operand = 0;
+
+    sc_memoryGet(instructionCounter, &value);
+    sc_commandDecode(value, &command, &operand);
+    printf("+%x : %x", command, operand);
     bc_box(14, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols + 1);
     printf(" Flags ");
     rows++;
     mt_gotoXY(rows, cols - 1);
-    printf("P O M T E");
+    if ((registr_of_flags & P) != 0) {
+        printf("P ");
+    } else {
+        printf("  ");
+    }
+    if ((registr_of_flags & O) != 0) {
+        printf("O ");
+    } else {
+        printf("  ");
+    }
+    if ((registr_of_flags & M) != 0) {
+        printf("M ");
+    } else {
+        printf("  ");
+    }
+    if ((registr_of_flags & T) != 0) {
+        printf("T ");
+    } else {
+        printf("  ");
+    }
+    if ((registr_of_flags & E) != 0) {
+        printf("E ");
+    } else {
+        printf("  ");
+    }
 
     /** Заполняем Keys **/
     bc_box(17, 49, 9, 41);
@@ -234,11 +266,38 @@ void Draw()
     printf("f6 - instructionCounter");
 
     bc_box(17, 3, 9, 44);
+    sc_memoryGet(instructionCounter, &value);
+
     bc_printbigchar(plus, 18, 4, white, black);
-    bc_printbigchar(nine, 18, 13, white, black);
-    bc_printbigchar(nine, 18, 22, white, black);
-    bc_printbigchar(nine, 18, 31, white, black);
-    bc_printbigchar(nine, 18, 40, white, black);
+    cols = 4 + 9;
+    for (int i = 3; i >= 0; i--) {
+        if (((value >> 4 * i) & 15) == 0x0) {
+            bc_printbigchar(zero, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x1) {
+            bc_printbigchar(two, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x2) {
+            bc_printbigchar(two, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x3) {
+            bc_printbigchar(three, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x4) {
+            bc_printbigchar(four, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x5) {
+            bc_printbigchar(five, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x6) {
+            bc_printbigchar(six, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x7) {
+            bc_printbigchar(seven, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x8) {
+            bc_printbigchar(eight, 18, cols, white, black);
+        } else if (((value >> 4 * i) & 15) == 0x9) {
+            bc_printbigchar(nine, 18, cols, white, black);
+        }
+        cols = cols + 9;
+    }
+    // bc_printbigchar(nine, 18, 13, white, black);
+    // bc_printbigchar(nine, 18, 22, white, black);
+    // bc_printbigchar(nine, 18, 31, white, black);
+    // bc_printbigchar(nine, 18, 40, white, black);
 
     mt_gotoXY(35, 0);
 }
