@@ -19,6 +19,7 @@ long int d[2] = { 1044529730, 1111638590 };
 long int e[2] = { 2114060802, 2114060926 };
 long int f[2] = { 33686018, 1040319102 };
 long int plus[2] = { 404232447, 4279769112 };
+long int minus[2] = { 255, 4278190080 };
 
 int bc_printA(char* str)
 {

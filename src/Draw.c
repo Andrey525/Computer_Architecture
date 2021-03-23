@@ -13,12 +13,9 @@ void init()
 void move(int i)
 {
     int rows = 6, cols = 4;
-    if (num_element == 100)
-        rows = 14, cols = 56;
-    else {
-        rows += num_element / 10;
-        cols += num_element % 10 * 6;
-    }
+
+    rows += num_element / 10;
+    cols += num_element % 10 * 6;
     mt_gotoXY(rows, cols);
     if (i == 1) {
         mt_setbgcolor(white);
@@ -26,7 +23,14 @@ void move(int i)
     } else {
         mt_setdefaultcolor();
     }
-    printf("+%04x", RAM[num_element]);
+    int value;
+    sc_memoryGet(num_element, &value);
+    int attribute = value & 0x4000;
+    if (attribute == 0) {
+        printf("+%04x", RAM[num_element]);
+    } else {
+        printf("-%04x", RAM[num_element]);
+    }
     mt_setdefaultcolor();
 }
 
@@ -84,7 +88,6 @@ void save()
     mt_gotoXY(30, 1);
     printf("File name for save RAM values: ");
     scanf("%s", filename);
-    fgets(filename, 20, stdin);
     sc_memorySave(filename);
     sleep(1);
     clean_input();
@@ -108,9 +111,19 @@ void F5()
 void F6()
 {
     instructionCounter = num_element;
-    // mt_gotoXY(9, 75);
-    // printf("+%04x ", instructionCounter);
-    // mt_gotoXY(30, 1);
+}
+
+void K_ENTER()
+{
+    int rows = 6, cols = 4;
+    rows += num_element / 10;
+    cols += num_element % 10 * 6;
+    mt_gotoXY(rows, cols);
+    printf("     ");
+    mt_gotoXY(rows, cols);
+    int value = 0;
+    scanf("%4x", &value);
+    sc_memorySet(num_element, value);
 }
 
 void Draw()
@@ -118,7 +131,8 @@ void Draw()
     mt_clrscr();
     int* rs = malloc(sizeof(int));
     int* cs = malloc(sizeof(int));
-
+    int value;
+    int command = 0, operand = 0;
     mt_getscreensize(rs, cs);
     if (*rs < 30 || *cs < 100) {
         printf("Невозможно отрисовать интерфейс.\nУвеличьте размер окна терминала.\n");
@@ -137,9 +151,13 @@ void Draw()
         rows++;
         mt_gotoXY(rows, 4);
         for (int j = 0; j < 10; j++) {
-            // int value = rand() % 65535;
-            // printf("+%04x ", value);
-            printf("+%04x ", RAM[i * 10 + j]);
+            sc_memoryGet(i * 10 + j, &value);
+            int attribute = value & 0x4000;
+            if (attribute == 0) {
+                printf("+%04x ", RAM[i * 10 + j]);
+            } else {
+                printf("-%04x ", RAM[i * 10 + j]);
+            }
         }
     }
     move(1);
@@ -151,9 +169,14 @@ void Draw()
     printf(" accumulator ");
     rows++;
     mt_gotoXY(rows, cols);
-    int value;
-    // sc_memoryGet(instructionCounter, &value);
-    printf("+%04x", accumulator);
+    int attribute;
+    attribute = accumulator & 0x4000;
+    if (attribute == 0) {
+        printf("+%04x", accumulator);
+    } else {
+        printf("-%04x", accumulator);
+    }
+
     bc_box(8, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols - 6);
@@ -168,11 +191,14 @@ void Draw()
     rows++;
     mt_gotoXY(rows, cols - 1);
 
-    int command = 0, operand = 0;
+    command = 0, operand = 0;
 
     sc_memoryGet(instructionCounter, &value);
-    sc_commandDecode(value, &command, &operand);
-    printf("+%02x : %02x", command, operand);
+    if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
+        printf("-%02x : %02x", command, operand);
+    } else {
+        printf("+%02x : %02x", command, operand);
+    }
     bc_box(14, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols + 1);
@@ -236,11 +262,11 @@ void Draw()
 
     rows++;
     mt_gotoXY(rows, cols);
-    printf("r  - run");
+    printf("r  - run  (in developing)");
 
     rows++;
     mt_gotoXY(rows, cols);
-    printf("t  - step");
+    printf("t  - step  (in developing)");
 
     rows++;
     mt_gotoXY(rows, cols);
@@ -257,8 +283,11 @@ void Draw()
     bc_box(17, 3, 9, 44);
 
     sc_memoryGet(instructionCounter, &value);
-
-    bc_printbigchar(plus, 18, 4, white, black);
+    if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
+        bc_printbigchar(minus, 18, 4, white, black);
+    } else {
+        bc_printbigchar(plus, 18, 4, white, black);
+    }
     cols = 4 + 9;
     for (int i = 3; i >= 0; i--) {
         if (((value >> 4 * i) & 15) == 0x0) {

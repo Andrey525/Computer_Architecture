@@ -1,6 +1,6 @@
 
 bin/prog: build/main.o build/Draw.o lib/libmySimpleComputer.a lib/libmyTerm.a lib/libmyBigChars.a lib/libmyReadkey.a bin
-	gcc build/main.o build/Draw.o -L./lib -lmySimpleComputer -L./lib -lmyTerm -L./lib -lmyBigChars -L./lib -lmyReadkey -o bin/prog
+	gcc build/main.o build/Draw.o -L./lib -lmySimpleComputer -L./lib -lmyTerm -L./lib -lmyBigChars -L./lib -lmyReadkey -lm -o bin/prog
 
 lib/libmySimpleComputer.a: build/mySimpleComputer.o lib
 	ar rc lib/libmySimpleComputer.a build/mySimpleComputer.o

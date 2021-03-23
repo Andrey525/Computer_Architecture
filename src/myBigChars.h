@@ -29,6 +29,7 @@ extern long int d[2];
 extern long int e[2];
 extern long int f[2];
 extern long int plus[2];
+extern long int minus[2];
 
 int bc_printA(char* str);
 int bc_box(int x1, int y1, int x2, int y2);

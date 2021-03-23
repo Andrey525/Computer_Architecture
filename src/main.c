@@ -2,11 +2,12 @@
 
 int main()
 {
+    srand(time(NULL));
     init();
-    sc_memorySet(12, 0x3B5F);
-    sc_memorySet(18, 0x3B5F);
-    sc_memorySet(67, 0x3B5F);
-    sc_memorySet(45, 0x3B5F);
+    for (int i = 0; i < SIZE_OF_MEMORY; i++) {
+        // sc_memorySet(i, rand() % 16383);
+        sc_memorySet(i, rand() % 32768);
+    }
     while (key != KEY_Q) {
         Draw();
         rk_readKey(&key);
@@ -36,16 +37,17 @@ int main()
             save();
             break;
         case KEY_R:
-            init();
             break;
         case KEY_T:
             break;
         case KEY_I:
+            init();
             break;
         case KEY_Q:
             // break while
             break;
         case KEY_ENTER:
+            K_ENTER();
             break;
         case KEY_OTHER:
             break;

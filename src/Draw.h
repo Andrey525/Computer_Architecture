@@ -15,6 +15,7 @@ void K_UP();
 void K_DOWN();
 void K_RIGHT();
 void K_LEFT();
+void K_ENTER();
 void F5();
 void F6();
 void Draw();
