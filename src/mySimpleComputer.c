@@ -71,10 +71,8 @@ int sc_regSet(int registr, int value)
     }
     if (value == 1) {
         registr_of_flags = registr_of_flags | registr;
-        // BIT_SET(registr_of_flags, registr);
     } else if (value == 0) {
         registr_of_flags = registr_of_flags & (~registr);
-        // BIT_DELETE(registr_of_flags, registr);
     }
     return 0;
 }
@@ -121,6 +119,7 @@ int sc_commandDecode(int value, int* command, int* operand)
         sc_regSet(E, 1);
         return ERROR_INVALID_COMMAND;
     }
+    sc_regSet(E, 0);
     *operand = temp_operand;
     *command = temp_command;
     return 0;

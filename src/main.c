@@ -1,30 +1,55 @@
-#include "myBigChars.h"
-#include "mySimpleComputer.h"
-#include "myTerm.h"
+#include "Draw.h"
 
 int main()
 {
-    sc_memoryInit();
-    sc_regInit();
-    srand(time(NULL));
-    int value;
-    for (int i = 0; i < SIZE_OF_MEMORY; i++) {
-        sc_commandEncode(0x32, i, &value);
-        sc_memorySet(i, value);
+    init();
+    sc_memorySet(12, 0x3B5F);
+    sc_memorySet(18, 0x3B5F);
+    sc_memorySet(67, 0x3B5F);
+    sc_memorySet(45, 0x3B5F);
+    while (key != KEY_Q) {
+        Draw();
+        rk_readKey(&key);
+        switch (key) {
+        case KEY_UP:
+            K_UP();
+            break;
+        case KEY_DOWN:
+            K_DOWN();
+            break;
+        case KEY_RIGHT:
+            K_RIGHT();
+            break;
+        case KEY_LEFT:
+            K_LEFT();
+            break;
+        case KEY_F5:
+            F5();
+            break;
+        case KEY_F6:
+            F6();
+            break;
+        case KEY_L:
+            load();
+            break;
+        case KEY_S:
+            save();
+            break;
+        case KEY_R:
+            init();
+            break;
+        case KEY_T:
+            break;
+        case KEY_I:
+            break;
+        case KEY_Q:
+            // break while
+            break;
+        case KEY_ENTER:
+            break;
+        case KEY_OTHER:
+            break;
+        }
     }
-    instructionCounter = 95;
-    sc_memorySet(instructionCounter, 0x3B5F);
-    sc_regSet(P, 1);
-    // sc_regSet(O, 1);
-    sc_regSet(M, 1);
-    sc_regSet(T, 1);
-    // sc_regSet(E, 1);
-    Draw();
-    // bc_printbigchar(a, 20, 20, white, black);
-    // bc_printbigchar(b, 20, 30, white, black);
-    // bc_printbigchar(c, 20, 40, white, black);
-    // bc_printbigchar(d, 20, 50, white, black);
-    // bc_printbigchar(e, 20, 60, white, black);
-    // bc_printbigchar(f, 20, 70, white, black);
     return 0;
 }
