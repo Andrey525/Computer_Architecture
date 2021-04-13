@@ -8,6 +8,13 @@ void init()
     accumulator = 0;
     num_element = 0;
     sc_regSet(T, 1);
+#if 1
+    int value;
+    for (int i = 0; i < SIZE_OF_MEMORY; i++) {
+        value = (commands[(rand() % NUM_COMMANDS + 0)] << 7) | (rand() % 99 + 0);
+        sc_memorySet(i, value);
+    }
+#endif
 }
 
 void move(int i)
@@ -23,14 +30,14 @@ void move(int i)
     } else {
         mt_setdefaultcolor();
     }
-    int value;
-    sc_memoryGet(num_element, &value);
-    int attribute = value & 0x4000;
-    if (attribute == 0) {
-        printf("+%04x", RAM[num_element]);
-    } else {
-        printf("-%04x", RAM[num_element]);
-    }
+    // int value;
+    // sc_memoryGet(num_element, &value);
+    // int attribute = value & 0x4000;
+    // if (attribute == 0) {
+    printf("+%04x", RAM[num_element]);
+    // } else {
+    // printf("-%04x", RAM[num_element]);
+    // }
     mt_setdefaultcolor();
 }
 
@@ -151,13 +158,13 @@ void Draw()
         rows++;
         mt_gotoXY(rows, 4);
         for (int j = 0; j < 10; j++) {
-            sc_memoryGet(i * 10 + j, &value);
-            int attribute = value & 0x4000;
-            if (attribute == 0) {
-                printf("+%04x ", RAM[i * 10 + j]);
-            } else {
-                printf("-%04x ", RAM[i * 10 + j]);
-            }
+            // sc_memoryGet(i * 10 + j, &value);
+            // int attribute = value & 0x4000;
+            // if (attribute == 0) {
+            printf("+%04x ", RAM[i * 10 + j]);
+            // } else {
+            // printf("-%04x ", RAM[i * 10 + j]);
+            // }
         }
     }
     move(1);
@@ -169,13 +176,13 @@ void Draw()
     printf(" accumulator ");
     rows++;
     mt_gotoXY(rows, cols);
-    int attribute;
-    attribute = accumulator & 0x4000;
-    if (attribute == 0) {
-        printf("+%04x", accumulator);
-    } else {
-        printf("-%04x", accumulator);
-    }
+    // int attribute;
+    // attribute = accumulator & 0x4000;
+    // if (attribute == 0) {
+    printf("+%04x", accumulator);
+    // } else {
+    // printf("-%04x", accumulator);
+    // }
 
     bc_box(8, 65, 2, 25);
     rows = rows + 2;
@@ -194,11 +201,12 @@ void Draw()
     command = 0, operand = 0;
 
     sc_memoryGet(instructionCounter, &value);
-    if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
-        printf("-%02x : %02x", command, operand);
-    } else {
-        printf("+%02x : %02x", command, operand);
-    }
+    sc_commandDecode(value, &command, &operand);
+    // if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
+    // printf("-%02x : %02x", command, operand);
+    // } else {
+    printf("+%02x : %02x", command, operand);
+    // }
     bc_box(14, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols + 1);
@@ -262,7 +270,7 @@ void Draw()
 
     rows++;
     mt_gotoXY(rows, cols);
-    printf("r  - run  (in developing)");
+    printf("r  - run");
 
     rows++;
     mt_gotoXY(rows, cols);
@@ -283,11 +291,11 @@ void Draw()
     bc_box(17, 3, 9, 44);
 
     sc_memoryGet(instructionCounter, &value);
-    if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
-        bc_printbigchar(minus, 18, 4, white, black);
-    } else {
-        bc_printbigchar(plus, 18, 4, white, black);
-    }
+    // if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
+    // bc_printbigchar(minus, 18, 4, white, black);
+    // } else {
+    bc_printbigchar(plus, 18, 4, white, black);
+    // }
     cols = 4 + 9;
     for (int i = 3; i >= 0; i--) {
         if (((value >> 4 * i) & 15) == 0x0) {
