@@ -113,11 +113,25 @@ void load()
 
 void F5()
 {
-    sc_memoryGet(num_element, &accumulator);
+    do {
+        mt_gotoXY(6, 76);
+        printf("     ");
+        mt_gotoXY(6, 76);
+        scanf("%4x", &accumulator);
+    } while (accumulator > 0xffff || accumulator < 0);
+
+    // sc_memoryGet(num_element, &accumulator);
 }
 void F6()
 {
-    instructionCounter = num_element;
+    do {
+        mt_gotoXY(9, 76);
+        printf("     ");
+        mt_gotoXY(9, 76);
+        scanf("%4x", &instructionCounter);
+    } while (instructionCounter > 99 || instructionCounter < 0);
+
+    // instructionCounter = num_element;
 }
 
 void K_ENTER()
@@ -125,11 +139,13 @@ void K_ENTER()
     int rows = 6, cols = 4;
     rows += num_element / 10;
     cols += num_element % 10 * 6;
-    mt_gotoXY(rows, cols);
-    printf("     ");
-    mt_gotoXY(rows, cols);
     int value = 0;
-    scanf("%4x", &value);
+    do {
+        mt_gotoXY(rows, cols);
+        printf("     ");
+        mt_gotoXY(rows, cols);
+        scanf("%4x", &value);
+    } while (value > 0xffff || value < 0);
     sc_memorySet(num_element, value);
 }
 
