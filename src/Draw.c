@@ -6,9 +6,8 @@ void init()
     sc_regInit();
     instructionCounter = 0;
     accumulator = 0;
-    num_element = 0;
     sc_regSet(T, 1);
-#if 1
+#if 0
     int value;
     for (int i = 0; i < SIZE_OF_MEMORY; i++) {
         value = (commands[(rand() % NUM_COMMANDS + 0)] << 7) | (rand() % 99 + 0);
@@ -21,8 +20,8 @@ void move(int i)
 {
     int rows = 6, cols = 4;
 
-    rows += num_element / 10;
-    cols += num_element % 10 * 6;
+    rows += instructionCounter / 10;
+    cols += instructionCounter % 10 * 6;
     mt_gotoXY(rows, cols);
     if (i == 1) {
         mt_setbgcolor(white);
@@ -30,49 +29,44 @@ void move(int i)
     } else {
         mt_setdefaultcolor();
     }
-    // int value;
-    // sc_memoryGet(num_element, &value);
-    // int attribute = value & 0x4000;
-    // if (attribute == 0) {
-    printf("+%04x", RAM[num_element]);
-    // } else {
-    // printf("-%04x", RAM[num_element]);
-    // }
+
+    printf("+%04x", RAM[instructionCounter]);
+
     mt_setdefaultcolor();
 }
 
 void K_UP()
 {
-    if (num_element > 9) {
+    if (instructionCounter > 9) {
         move(0);
-        num_element -= 10;
+        instructionCounter -= 10;
         move(1);
     }
 }
 
 void K_DOWN()
 {
-    if (num_element < 90) {
+    if (instructionCounter < 90) {
         move(0);
-        num_element += 10;
+        instructionCounter += 10;
         move(1);
     }
 }
 
 void K_RIGHT()
 {
-    if (num_element % 10 != 9) {
+    if (instructionCounter % 10 != 9) {
         move(0);
-        num_element++;
+        instructionCounter++;
         move(1);
     }
 }
 
 void K_LEFT()
 {
-    if (num_element % 10 != 0) {
+    if (instructionCounter % 10 != 0) {
         move(0);
-        num_element--;
+        instructionCounter--;
         move(1);
     }
 }
@@ -119,8 +113,6 @@ void F5()
         mt_gotoXY(6, 76);
         scanf("%4x", &accumulator);
     } while (accumulator > 0xffff || accumulator < 0);
-
-    // sc_memoryGet(num_element, &accumulator);
 }
 void F6()
 {
@@ -130,15 +122,13 @@ void F6()
         mt_gotoXY(9, 76);
         scanf("%4x", &instructionCounter);
     } while (instructionCounter > 99 || instructionCounter < 0);
-
-    // instructionCounter = num_element;
 }
 
 void K_ENTER()
 {
     int rows = 6, cols = 4;
-    rows += num_element / 10;
-    cols += num_element % 10 * 6;
+    rows += instructionCounter / 10;
+    cols += instructionCounter % 10 * 6;
     int value = 0;
     do {
         mt_gotoXY(rows, cols);
@@ -146,7 +136,7 @@ void K_ENTER()
         mt_gotoXY(rows, cols);
         scanf("%4x", &value);
     } while (value > 0xffff || value < 0);
-    sc_memorySet(num_element, value);
+    sc_memorySet(instructionCounter, value);
 }
 
 void Draw()
@@ -174,13 +164,8 @@ void Draw()
         rows++;
         mt_gotoXY(rows, 4);
         for (int j = 0; j < 10; j++) {
-            // sc_memoryGet(i * 10 + j, &value);
-            // int attribute = value & 0x4000;
-            // if (attribute == 0) {
+
             printf("+%04x ", RAM[i * 10 + j]);
-            // } else {
-            // printf("-%04x ", RAM[i * 10 + j]);
-            // }
         }
     }
     move(1);
@@ -192,13 +177,8 @@ void Draw()
     printf(" accumulator ");
     rows++;
     mt_gotoXY(rows, cols);
-    // int attribute;
-    // attribute = accumulator & 0x4000;
-    // if (attribute == 0) {
+
     printf("+%04x", accumulator);
-    // } else {
-    // printf("-%04x", accumulator);
-    // }
 
     bc_box(8, 65, 2, 25);
     rows = rows + 2;
@@ -218,11 +198,9 @@ void Draw()
 
     sc_memoryGet(instructionCounter, &value);
     sc_commandDecode(value, &command, &operand);
-    // if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
-    // printf("-%02x : %02x", command, operand);
-    // } else {
+
     printf("+%02x : %02x", command, operand);
-    // }
+
     bc_box(14, 65, 2, 25);
     rows = rows + 2;
     mt_gotoXY(rows, cols + 1);
@@ -307,11 +285,8 @@ void Draw()
     bc_box(17, 3, 9, 44);
 
     sc_memoryGet(instructionCounter, &value);
-    // if (sc_commandDecode(value, &command, &operand) == ERROR_NOT_COMMAND) {
-    // bc_printbigchar(minus, 18, 4, white, black);
-    // } else {
+
     bc_printbigchar(plus, 18, 4, white, black);
-    // }
     cols = 4 + 9;
     for (int i = 3; i >= 0; i--) {
         if (((value >> 4 * i) & 15) == 0x0) {

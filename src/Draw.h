@@ -5,7 +5,6 @@
 #include "mySimpleComputer.h"
 #include "myTerm.h"
 
-int num_element;
 void init();
 void clean_input();
 void save();

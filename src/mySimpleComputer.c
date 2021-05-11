@@ -123,7 +123,7 @@ int sc_commandDecode(int value, int* command, int* operand)
         sc_regSet(E, 1);
         return ERROR_INVALID_COMMAND;
     }
-    sc_regSet(E, 0);
+    // sc_regSet(E, 0);
     *operand = temp_operand;
     *command = temp_command;
     return 0;

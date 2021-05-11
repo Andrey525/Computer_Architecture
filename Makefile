@@ -1,6 +1,6 @@
 
-bin/prog: build/main.o build/Draw.o build/mysignal.o lib/libmySimpleComputer.a lib/libmyTerm.a lib/libmyBigChars.a lib/libmyReadkey.a bin
-	gcc build/main.o build/Draw.o build/mysignal.o -L./lib -lmySimpleComputer -L./lib -lmyTerm -L./lib -lmyBigChars -L./lib -lmyReadkey -lm -o bin/prog
+bin/prog: build/main.o build/Draw.o build/mysignal.o build/cpu.o lib/libmySimpleComputer.a lib/libmyTerm.a lib/libmyBigChars.a lib/libmyReadkey.a bin
+	gcc build/main.o build/Draw.o build/mysignal.o build/cpu.o -L./lib -lmySimpleComputer -L./lib -lmyTerm -L./lib -lmyBigChars -L./lib -lmyReadkey -lm -o bin/prog
 
 lib/libmySimpleComputer.a: build/mySimpleComputer.o lib
 	ar rc lib/libmySimpleComputer.a build/mySimpleComputer.o
@@ -14,7 +14,7 @@ lib/libmyBigChars.a: build/myBigChars.o build/myTerm.o lib
 lib/libmyReadkey.a: build/myReadkey.o lib
 	ar rc lib/libmyReadkey.a build/myReadkey.o
 
-build/main.o: src/main.c src/mySimpleComputer.h src/myTerm.h src/myBigChars.h build
+build/main.o: src/main.c src/mySimpleComputer.h src/myTerm.h src/myBigChars.h src/cpu.h src/Draw.h src/mysignal.h build
 	gcc -Wall -Werror -c src/main.c -o build/main.o 
 
 build/mySimpleComputer.o: src/mySimpleComputer.c src/mySimpleComputer.h build
@@ -32,8 +32,11 @@ build/myReadkey.o: src/myReadkey.c src/myReadkey.h build
 build/Draw.o: src/Draw.c src/myBigChars.h src/myTerm.h src/mySimpleComputer.h src/myReadkey.h build
 	gcc -Wall -Werror -c src/Draw.c -o build/Draw.o
 
-build/mysignal.o: src/mysignal.c src/Draw.h src/mysignal.h src/mySimpleComputer.h build
+build/mysignal.o: src/mysignal.c src/Draw.h src/mysignal.h src/mySimpleComputer.h src/cpu.h build
 	gcc -Wall -Werror -c src/mysignal.c -o build/mysignal.o
+
+build/cpu.o: src/cpu.c src/cpu.h src/myTerm.h src/mySimpleComputer.h src/myReadkey.h build
+	gcc -Wall -Werror -c src/cpu.c -o build/cpu.o
 
 build: 
 	mkdir build
