@@ -45,7 +45,7 @@ int get_command(char* str)
     } else if (strcmp(str, "HALT") == 0) {
         command = 0x43;
     } else if (strcmp(str, "ADDC") == 0) {
-        command = 0x63;
+        command = 0x65;
     } else if (strcmp(str, "=") == 0) {
         command = 0;
     }
