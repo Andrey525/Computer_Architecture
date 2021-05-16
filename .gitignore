@@ -10,4 +10,5 @@
 !myBigChars
 !myTerm+myBigChars
 !myReadkey
-!.txt
+!*.txt
+!*.sa
