@@ -72,6 +72,8 @@ int main()
     sc_memorySet(28, value);
     sc_commandEncode(0x43, 64, &value);
     sc_memorySet(29, value);
+    sc_commandEncode(0x65, 0, &value);
+    sc_memorySet(90, value);
 
     signal(SIGALRM, my_timer);
     signal(SIGUSR1, my_signal);
@@ -121,9 +123,6 @@ int main()
                 break;
             case KEY_R:
                 alarm(0);
-                // move(0);
-                // num_element = instructionCounter;
-                // move(1);
                 sc_regSet(T, 0);
                 setitimer(ITIMER_REAL, &nval, &oval);
                 break;

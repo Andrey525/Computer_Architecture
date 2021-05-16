@@ -44,14 +44,18 @@ int CU()
         sc_regSet(T, 1);
         return 1;
     }
+    if (operand < 0 || operand >= SIZE_OF_MEMORY) {
+        sc_regSet(M, 1);
+        return 1;
+    }
     if (command > 0x33 || command < 0x30) {
         if (command == 0x10) { // READ
             mt_gotoXY((operand / 10) + 6, (operand % 10) * 6 + 4);
             printf("     ");
             mt_gotoXY((operand / 10) + 6, (operand % 10) * 6 + 4);
-            rk_mytermregime(1, 1, 1, 1, 1);
+            // rk_mytermregime(1, 1, 1, 1, 1);
             scanf("%4x", &value);
-            rk_mytermrestore();
+            // rk_mytermrestore();
             if (value < 0xffff) {
                 sc_memorySet(operand, value);
             } else {
@@ -92,15 +96,24 @@ int CU()
         } else if (command == 0x43) { // HALT
             sc_regSet(T, 1);
             return 1;
-        } else if (command == 0x63) { // RCR
-            value = (operand << 5) & 0b1100000;
-            accumulator = (operand >> 2) | value;
+        } else if (command == 0x65) { // ADDC
+            sc_memoryGet(operand, &value); // получаем значение указанной ячейки памяти
+            operand = accumulator & 0x7F; // получаем адрес ячейки памяти, на которую указывает аккумулятор
+            if (operand < 0 || operand >= SIZE_OF_MEMORY) {
+                sc_regSet(M, 1);
+                return 1;
+            }
+            accumulator = value; // записываем значение указанной ячейки памяти в аккумулятор
+            sc_memoryGet(operand, &value); // получаем значение ячейки памяти, адрес которой находился в аккумкуляторе
+            accumulator += value; // результат сложения
         }
     } else {
         if (ALU(command, operand)) {
             return 1;
         }
     }
-    instructionCounter++;
+    if (instructionCounter != 99) {
+    	instructionCounter++;
+	}
     return 0;
 }

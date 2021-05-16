@@ -6,9 +6,9 @@ void my_timer(int signo)
     int value;
     sc_regGet(T, &value);
     if (value == 0 && instructionCounter < 99) {
-        move(0);
         CU();
-        move(1);
+    } else if (value == 1) {
+        alarm(0);
     }
     Draw();
 }
