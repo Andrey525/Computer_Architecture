@@ -2,7 +2,7 @@
 bin/prog: build/main.o build/Draw.o build/mysignal.o build/cpu.o lib/libmySimpleComputer.a lib/libmyTerm.a lib/libmyBigChars.a lib/libmyReadkey.a bin
 	gcc build/main.o build/Draw.o build/mysignal.o build/cpu.o -L./lib -lmySimpleComputer -L./lib -lmyTerm -L./lib -lmyBigChars -L./lib -lmyReadkey -lm -o bin/prog
 
-bin/sat: build/assembler.o bin
+bin/sat: build/assembler.o lib/libmySimpleComputer.a bin
 	gcc build/assembler.o -o bin/sat -L./lib -lmySimpleComputer
 
 lib/libmySimpleComputer.a: build/mySimpleComputer.o lib
@@ -41,8 +41,16 @@ build/mysignal.o: src/mysignal.c src/Draw.h src/mysignal.h src/mySimpleComputer.
 build/cpu.o: src/cpu.c src/cpu.h src/myTerm.h src/mySimpleComputer.h src/myReadkey.h build
 	gcc -Wall -Werror -c src/cpu.c -o build/cpu.o
 
-build/assembler.o: src/assembler.c src/mySimpleComputer.h build
+build/assembler.o: src/assembler.c src/mySimpleComputer.h src/assembler.h build
 	gcc -Wall -Werror -c src/assembler.c -o build/assembler.o
+
+
+bin/basic: build/basic.o 
+	gcc build/basic.o -o bin/basic
+
+build/basic.o: src/basic.c src/stek.h src/rpn.h build
+	gcc -Wall -Werror -c src/basic.c -o build/basic.o
+
 
 
 build: 

@@ -34,6 +34,7 @@ int accumulator; //
 #define NUM_COMMANDS 38
 extern const int commands[NUM_COMMANDS];
 
+int sc_init();
 int sc_memoryInit();
 int sc_memorySet(int adress, int value);
 int sc_memoryGet(int adress, int* value);

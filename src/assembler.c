@@ -1,7 +1,4 @@
-#include "mySimpleComputer.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
 
 int find_pref(char* ar, int arg)
 {
@@ -109,20 +106,16 @@ int write_into_memory(char* str)
     return 0;
 }
 
-int main(int argc, char* argv[])
+int assembler_to_simple_computer(char* from, char* to)
 {
-    if (argc != 3 || !find_pref(argv[1], 1) || !find_pref(argv[2], 2)) {
-        printf("Неверные аргументы\n");
-        return 0;
-    } else {
-        printf("Все ок\n");
-    }
+
     FILE* input;
-    if ((input = fopen(argv[1], "r")) == NULL) {
+    if ((input = fopen(from, "r")) == NULL) {
         printf("Не удалось открыть файл\n"); // открыть файл не удалось
         return 0;
     }
     printf("Файл открыт для чтения\n"); // требуемые действия над данными
+    sc_init();
     char* estr;
     char str[50];
     int i = 0;
@@ -149,8 +142,8 @@ int main(int argc, char* argv[])
         //Если файл не закончился, и не было ошибки чтения
         //выводим считанную строку  на экран
         if (write_into_memory(str)) {
-        	printf("Трансляция не выполнена, в Вашей программе ошибка\n");
-        	return 0;
+            printf("Трансляция не выполнена, в Вашей программе ошибка\n");
+            return 1;
         }
         printf("\tстрока %d\n", i);
         i++;
@@ -158,6 +151,18 @@ int main(int argc, char* argv[])
     }
     fclose(input);
 
-    sc_memorySave(argv[2]);
+    sc_memorySave(to);
+    return 0;
+}
+
+int main(int argc, char* argv[])
+{
+    if (argc != 3 || !find_pref(argv[1], 1) || !find_pref(argv[2], 2)) {
+        printf("Неверные аргументы\n");
+        return 0;
+    } else {
+        printf("Все ок\n");
+    }
+    assembler_to_simple_computer(argv[1], argv[2]);
     return 0;
 }
